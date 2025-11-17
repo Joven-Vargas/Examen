@@ -1,38 +1,47 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-/**
- *
- * @author Asus
- */
-public class Gerente extends Empleado{
-private int numEquipoACargo;
+public class Gerente extends Empleado {
 
-    public Gerente(String nombre1, int numEquipoACargo, double salario1, int hijos, int equipos) {
-        this.numEquipoACargo = numEquipoACargo;
-    }
+    private String departamento;
+    private int numEmpleadosCargo;
 
-    public Gerente(int numEquipoACargo, String nombre, int edad, double salario, int numhijos) throws SalarioInvalido {
+    // Constructor principal
+    public Gerente(String nombre, int edad, double salario, int numhijos,
+                   String departamento, int numEmpleadosCargo) throws SalarioInvalido {
         super(nombre, edad, salario, numhijos);
-        this.numEquipoACargo = numEquipoACargo;
+        this.departamento = departamento;
+        this.numEmpleadosCargo = numEmpleadosCargo;
     }
 
+    // Constructor simplificado para tu Main
+    public Gerente(String nombre, int edad, double salario, String departamento) throws SalarioInvalido {
+        super(nombre, edad, salario, 0); // numhijos = 0 por defecto
+        this.departamento = departamento;
+        this.numEmpleadosCargo = 0; // 0 por defecto
+    }
 
+    public String getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
+    }
+
+    public int getNumEmpleadosCargo() {
+        return numEmpleadosCargo;
+    }
+
+    public void setNumEmpleadosCargo(int numEmpleadosCargo) {
+        this.numEmpleadosCargo = numEmpleadosCargo;
+    }
+
+    
+    
     @Override
-    public double calcularBonificacicon() {
-        return 10.0* this.numhijos ;
-    }
-    
-      @Override
     public String generarReporte() {
-        
-        return super.generarReporte()+
-        String.format(" | Cargo: Gerente  | Equipos:   %| Bonificacion:  %", 
-                numEquipoACargo, calcularBonificacicon());
+        return super.generarReporte()
+             + " | Departamento: " + departamento
+             + " | Empleados a cargo: " + numEmpleadosCargo;
     }
-    
-    
 }

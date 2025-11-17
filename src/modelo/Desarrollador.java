@@ -1,48 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-/**
- *
- * @author Asus
- */
-public class Desarrollador  extends Empleado{
-    
+public class Desarrollador extends Empleado {
+
     private String lenguaje;
+    private int lineasCodigo;
 
-    public Desarrollador(String nombre1, int edad1, double salario1, int hijos, String lenguaje1) {
+    // Constructor principal que inicializa todo
+    public Desarrollador(String nombre, int edad, double salario, int numhijos,
+                         String lenguaje, int lineasCodigo) throws SalarioInvalido {
+        super(nombre, edad, salario, numhijos); // inicializa atributos de Empleado
+        this.lenguaje = lenguaje;
+        this.lineasCodigo = lineasCodigo;
     }
 
-    public Desarrollador(String lenguaje) {
+    // Constructor simplificado para tu Main (sin numhijos y lineasCodigo)
+    public Desarrollador(String nombre, int edad, double salario, String lenguaje) throws SalarioInvalido {
+        super(nombre, edad, salario, 0); // numhijos = 0 por defecto
+        this.lenguaje = lenguaje;
+        this.lineasCodigo = 0; // 0 por defecto
+    }
+
+    public String getLenguaje() {
+        return lenguaje;
+    }
+
+    public void setLenguaje(String lenguaje) {
         this.lenguaje = lenguaje;
     }
 
-    public Desarrollador(String lenguaje, String nombre, int edad, double salario, int numhijos) throws SalarioInvalido {
-        super(nombre, edad, salario, numhijos);
-        this.lenguaje = lenguaje;
-        totalDesarrolladores++;
+    public int getLineasCodigo() {
+        return lineasCodigo;
     }
-   
 
-    @Override
-    public double calcularBonificacicon() {
-        
-        return 20.0*this.numhijos;
+    public void setLineasCodigo(int lineasCodigo) {
+        this.lineasCodigo = lineasCodigo;
     }
+
+  
+
     
     
-    public String getlenguaje(){
-    return lenguaje;
-    
-    }
     @Override
     public String generarReporte() {
-        
-        return super.generarReporte()+
-        String.format(" | Cargo: Desarrollador  | Lenguaje:   %| Bonificacion:  %", 
-                lenguaje, calcularBonificacicon());
+        return super.generarReporte() 
+               + " | Lenguaje: " + lenguaje 
+               + " | Líneas: " + lineasCodigo;
     }
-    
-    }    
+}

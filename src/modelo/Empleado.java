@@ -5,33 +5,24 @@
 package modelo;
 
 /**
- *
- * @author Asus
+ * Clase base abstracta para empleados.
  */
-public abstract class Empleado implements Reportable{
+public abstract class Empleado implements Reportable {
 
     protected String nombre;
     protected int edad;
     protected double salario;
     protected int numhijos;
-    
-    protected static  int totalEmpleados=0;
-    protected static int totalDesarrolladores=0;
-    protected static int totalGerentes=0;
 
     public Empleado() {
     }
 
-    
     public Empleado(String nombre, int edad, double salario, int numhijos) throws SalarioInvalido {
-        if(salario < 0 )throw new SalarioInvalido("El salario no puede see negativo ");
         this.nombre = nombre;
         this.edad = edad;
-        this.salario = salario;
+        setSalario(salario); // valida salario
         this.numhijos = numhijos;
-        totalEmpleados++;
     }
-    public abstract double calcularBonificacicon();
 
     public String getNombre() {
         return nombre;
@@ -53,7 +44,13 @@ public abstract class Empleado implements Reportable{
         return salario;
     }
 
-    public void setSalario(double salario) {
+    /**
+     * Valida que el salario no sea negativo. Lanza SalarioInvalido si es negativo.
+     */
+    public void setSalario(double salario) throws SalarioInvalido {
+        if (salario < 0) {
+            throw new SalarioInvalido("El salario no puede ser negativo: " + salario);
+        }
         this.salario = salario;
     }
 
@@ -65,38 +62,16 @@ public abstract class Empleado implements Reportable{
         this.numhijos = numhijos;
     }
 
-    public static int getTotalEmpleados() {
-        return totalEmpleados;
-    }
-
-    public static void setTotalEmpleados(int totalEmpleados) {
-        Empleado.totalEmpleados = totalEmpleados;
-    }
-
-    public static int getTotalDesarrolladores() {
-        return totalDesarrolladores;
-    }
-
-    public static void setTotalDesarrolladores(int totalDesarrolladores) {
-        Empleado.totalDesarrolladores = totalDesarrolladores;
-    }
-
-    public static int getTotalGerentes() {
-        return totalGerentes;
-    }
-
-    public static void setTotalGerentes(int totalGerentes) {
-        Empleado.totalGerentes = totalGerentes;
-    }
-
- 
-    
-    
+  
     @Override
     public String generarReporte() {
-        return String.format("Empleado: % | Edad:  %| Salario:   %| Hijos:  %", 
-                nombre, edad,salario,numhijos);
-
+        return String.format(
+            "Empleado: %s | Edad: %d | Salario: %.2f | Hijos: %d",
+            nombre,
+            edad,
+            salario,
+            numhijos
+        );
     }
-    
 }
+

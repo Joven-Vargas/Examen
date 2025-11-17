@@ -1,115 +1,119 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vista;
-
-// MainPrincipal.java
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import modelo.Desarrollador;
 import modelo.Empleado;
 import modelo.Gerente;
+import modelo.SalarioInvalido;
 
 public class Main {
-    private static final List<Empleado> empleados = new ArrayList<>();
 
-    public static void main(String[] args) {
-        try (Scanner sc = new Scanner(System.in)) {
-            boolean salir = false;
-            
-            while (!salir) {
-                mostrarMenu();
-                int opcion = leerInt(sc, "Seleccione opción: ");
-                
-                switch (opcion) {
-                    case 1 -> agregarDesarrollador(sc);
-                    case 2 -> agregarGerente(sc);
-                    case 3 -> listarReportes();
-                    case 4 -> mostrarContadores();
-                    case 5 -> salir = true;
-                    default -> System.out.println("Opción no válida.");
-                }
+    static Scanner sc = new Scanner(System.in);
+    static ArrayList<Empleado> empleados = new ArrayList<>();
+
+    public static void main(String[] args) throws SalarioInvalido {
+
+        int opcion;
+
+        do {
+            System.out.println("\n========= MENÚ PRINCIPAL =========");
+            System.out.println("1. Registrar empleado");
+            System.out.println("2. Listar empleados");
+            System.out.println("3. Generar reportes");
+            System.out.println("4. Salir");
+            System.out.print("Seleccione una opción: ");
+
+            opcion = sc.nextInt();
+            sc.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    registrarEmpleado();
+                    break;
+                case 2:
+                    listarEmpleados();
+                    break;
+                case 3:
+                    listarReportes();
+                    break;
+                case 4:
+                    System.out.println("Saliendo del sistema...");
+                    break;
+                default:
+                    System.out.println("Opción inválida.");
             }
-            
-            System.out.println("Fin del programa. ¡Hasta luego!");
+
+        } while (opcion != 4);
+
+    }
+
+    // ---------------------- REGISTRAR ----------------------
+    public static void registrarEmpleado() throws SalarioInvalido {
+        System.out.println("\n--- REGISTRAR EMPLEADO ---");
+        System.out.println("1. Desarrollador");
+        System.out.println("2. Gerente");
+        System.out.print("Seleccione tipo: ");
+        int tipo = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Nombre: ");
+        String nombre = sc.nextLine();
+
+        System.out.print("Edad: ");
+        int edad = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Salario base: ");
+        double salario = sc.nextDouble();
+        sc.nextLine();
+
+        if (tipo == 1) {
+            System.out.print("Lenguaje de programación: ");
+            String lenguaje = sc.nextLine();
+
+            empleados.add(new Desarrollador(nombre, edad, salario, lenguaje));
+            System.out.println("Desarrollador registrado correctamente.");
+
+        } else if (tipo == 2) {
+            System.out.print("Departamento: ");
+            String departamento = sc.nextLine();
+
+
+            empleados.add(new Gerente(nombre, edad, salario, departamento));
+            System.out.println("Gerente registrado correctamente.");
+
+        } else {
+            System.out.println("Tipo inválido.");
         }
     }
 
-    private static void mostrarMenu() {
-        System.out.println("\n--- MENÚ ---");
-        System.out.println("1) Agregar Desarrollador");
-        System.out.println("2) Agregar Gerente");
-        System.out.println("3) Listar reportes de empleados");
-        System.out.println("4) Mostrar contadores");
-        System.out.println("5) Salir");
-    }
+    // ---------------------- LISTAR EMPLEADOS ----------------------
+    public static void listarEmpleados() {
+        System.out.println("\n--- LISTA DE EMPLEADOS ---");
 
-    private static void agregarDesarrollador(Scanner sc) {
-        System.out.println("\n--- Agregar Desarrollador ---");
-        String nombre = leerString(sc, "Nombre: ");
-        int edad = leerInt(sc, "Edad: ");
-        double salario = leerDouble(sc, "Salario: ");
-        int hijos = leerInt(sc, "Número de hijos: ");
-        String lenguaje = leerString(sc, "Lenguaje de programación: ");
-        Desarrollador d = new Desarrollador(nombre, edad, salario, hijos, lenguaje);
-        empleados.add(d);
-        System.out.println("Desarrollador agregado correctamente.");
-    }
+        if (empleados.isEmpty()) {
+            System.out.println("No hay empleados registrados.");
+            return;
+        }
 
-    private static void agregarGerente(Scanner sc) {
-        System.out.println("\n--- Agregar Gerente ---");
-        String nombre = leerString(sc, "Nombre: ");
-        int edad = leerInt(sc, "Edad: ");
-        double salario = leerDouble(sc, "Salario: ");
-        int hijos = leerInt(sc, "Número de hijos: ");
-        int equipos = leerInt(sc, "Número de equipos a cargo: ");
-        Gerente g = new Gerente(nombre, edad, salario, hijos, equipos);
-        empleados.add(g);
-        System.out.println("Gerente agregado correctamente.");
-    }
-
-    private static void listarReportes() {
-        System.out.println("\n--- Reportes de empleados ---");
+        // Usamos generarReporte() para mostrar correctamente los datos
         for (Empleado e : empleados) {
             System.out.println(e.generarReporte());
         }
-        if (empleados.isEmpty()) System.out.println("No hay empleados registrados.");
     }
 
-    private static void mostrarContadores() {
-        System.out.println("\n--- Contadores ---");
-        System.out.println("Total empleados: " + Empleado.getTotalEmpleados());
-        System.out.println("Total desarrolladores: " + Empleado.getTotalDesarrolladores());
-        System.out.println("Total gerentes: " + Empleado.getTotalGerentes());
-    }
+    // ---------------------- REPORTES ----------------------
+    public static void listarReportes() {
+        System.out.println("\n--- REPORTES DE EMPLEADOS ---");
 
-    // Métodos auxiliares de lectura con validación básica
-    private static int leerInt(Scanner sc, String mensaje) {
-        while (true) {
-            System.out.print(mensaje);
-            try {
-                return Integer.parseInt(sc.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada inválida. Intente de nuevo.");
-            }
+        if (empleados.isEmpty()) {
+            System.out.println("No hay empleados registrados.");
+            return;
         }
-    }
 
-    private static double leerDouble(Scanner sc, String mensaje) {
-        while (true) {
-            System.out.print(mensaje);
-            try {
-                return Double.parseDouble(sc.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada inválida. Intente de nuevo.");
-            }
+        for (Empleado e : empleados) {
+            System.out.println("-------------------------------------");
+            System.out.println(e.generarReporte());
         }
-    }
-
-    private static String leerString(Scanner sc, String mensaje) {
-        System.out.print(mensaje);
-        return sc.nextLine().trim();
     }
 }
